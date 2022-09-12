@@ -83,13 +83,19 @@ var itemList = document.getElementById('items');
 var items = document.getElementsByClassName('list-group-item');
 
 itemList.addEventListener('click', removeItem);
+
 form.addEventListener('submit', addIem);
+
 function addIem(e){
     e.preventDefault();
     var newItem = document.getElementById('item').value;
+    var newDescription = document.getElementById('description').value;
+
     var li = document.createElement('li');
     li.className='list-group-item';
-    li.appendChild(document.createTextNode(newItem));
+    li.appendChild(document.createTextNode(newItem,' '));
+    li.appendChild(document.createTextNode(newDescription));
+
     var deleteBtn = document.createElement('button');
     deleteBtn.className='btn btn-danger btn-sm float-right delete';
     deleteBtn.appendChild(document.createTextNode('X'));
@@ -108,12 +114,33 @@ function removeItem(e){
             itemList.removeChild(li);
         }
     }
-
 }
+
 // to create multiple buttons
-for(var i=0; i<=items.length; i++){
+for(var i=0; i<items.length; i++){
     var editBtn = document.createElement('button');
     editBtn.className='btn btn-info btn-sm float-right edit';
     editBtn.appendChild(document.createTextNode('Edit'));
     items[i].appendChild(editBtn);
+}
+
+var filter = document.getElementById('filter');
+
+filter.addEventListener('keyup', filterItems);
+function filterItems(e){
+    var text = e.target.value.toLowerCase();
+    var list1 = itemList.getElementsByTagName('li');
+    
+    
+    Array.from(list1).forEach(function(item){
+        var itemName = item.firstChild.textContent;
+        var descriptionItems = item.childNodes[1].textContent;
+        if((itemName.toLowerCase().indexOf(text) !=-1) ||(descriptionItems.toLowerCase().indexOf(text) !=-1) ) {
+            item.style.display='block';
+        }
+        else{
+            item.style.display='none';
+        }
+        
+    });        
 }
